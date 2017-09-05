@@ -5,6 +5,8 @@ const Song = mongoose.model('song');
 const Lyric = mongoose.model('lyric');
 const SongType = require('./song_type');
 const LyricType = require('./lyric_type');
+const songService = require('../services').songs;
+const lyricService = require('../services').lyrics;
 
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -17,7 +19,7 @@ const mutation = new GraphQLObjectType({
         }
       },
       resolve(parentValue, {title}) {
-        return (new Song({title})).save()
+        return songService.addSong(title);
       }
     },
     addLyricToSong: {
@@ -31,7 +33,7 @@ const mutation = new GraphQLObjectType({
         }
       },
       resolve(parentValue, {content, songId}) {
-        return Song.addLyric(songId, content);
+        return songService.addLyric(songId,content);//Song.addLyric(songId, content);
       }
     },
     likeLyric: {
@@ -43,7 +45,7 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {id}) {
         console.log(id)
-        return Lyric.like(id);
+        return lyricService.likeLyric(id);
       }
     },
     deleteSong: {
@@ -54,7 +56,7 @@ const mutation = new GraphQLObjectType({
         }
       },
       resolve(parentValue, {id}) {
-        return Song.remove({_id: id});
+        return songService.removeSong(id);
       }
     }
   }

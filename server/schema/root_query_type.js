@@ -6,7 +6,7 @@ const LyricType = require("./lyric_type");
 const Lyric = mongoose.model("lyric");
 const Song = mongoose.model("song");
 const songServices = require("../services").songs;
-const lyricServices = require("../services").lyrics;
+const lyricService = require("../services").lyrics;
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -28,7 +28,7 @@ const RootQuery = new GraphQLObjectType({
       type: LyricType,
       args: { id: { type: new GraphQLNonNull(GraphQLID) } },
       resolve(parnetValue, { id }) {
-        return lyricServices.findById(id);
+        return lyricService.findLyricById(id);
       }
     }
   })
